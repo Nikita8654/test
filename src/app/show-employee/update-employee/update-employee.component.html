@@ -7,9 +7,7 @@
           <input type="text"
                  id="id"
                  name="id"
-                 [(ngModel)]="id"
-                 required
-                 #idInput
+                 formControlName="id"
                  class="form-control">
         </div>
         <div class="form-group">
@@ -17,9 +15,7 @@
           <input type="text"
                  id="name"
                  name="name"
-                 [(ngModel)]="name"
-                 required
-                 #nameInput
+                 formControlName="name"
                  class="form-control">
         </div>
         <div class="form-group">
@@ -27,22 +23,18 @@
           <input type="text"
                  id="salary"
                  name="salary"
-                 [(ngModel)]="salary"
-                 required
-                 #salaryInput
+                formControlName="salary"
                  class="form-control">
         </div>
         <div class="form-group">
           <label>Department</label>
           <input type="text"
-                 id="dept"
-                 name="dept"
-                 [(ngModel)]="dept"
-                 required
-                 #deptInput
-                 class="form-control">
+                 id="department"
+                 name="department"
+                 formControlName="department"
+          class="form-control">
         </div>
-        <button class="btn btn-primary" type="button">Update Employee</button>
+        <button class="btn btn-primary" type="button" (click)="onUpdate()">Update Employee</button>
       </form>
     </div>
   </div>

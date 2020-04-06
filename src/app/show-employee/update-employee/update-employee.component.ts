@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {Employee} from '../Employee.model';
-import {EmpService} from '../emp.service';
-import {FormGroup} from '@angular/forms';
+import {Employee} from '../../Employee.model';
+import {EmpService} from '../../emp.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-update-employee',
@@ -9,37 +9,37 @@ import {FormGroup} from '@angular/forms';
   styleUrls: ['./update-employee.component.css']
 })
 export class UpdateEmployeeComponent implements OnInit {
-  updateForm: FormGroup;
-  id: number;
-  name: string;
-  salary: number;
-  dept: string;
-  @ViewChild('idInput') idInputRef: ElementRef;
-  @ViewChild('nameInput') nameInputRef: ElementRef;
-  @ViewChild('salaryInput') salaryInputRef: ElementRef;
-  @ViewChild('deptInput') deptInputRef: ElementRef;
-  @Input() emp: Employee;
+
+  updateForm: FormGroup = new FormGroup({
+    id: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    salary: new FormControl('', [Validators.required]),
+    department: new FormControl('', [Validators.required]),
+  });
+  @Input() i: number;
+  Employee: Employee[] = [];
+  updatedIndex: number;
 
   constructor(private employeeService: EmpService) {
-    // this.employeeService.changedDetails.subscribe(this.emp => {
-    //   this.idInputRef.nativeElement.value=this.emp.id
-    // });
   }
 
   ngOnInit(): void {
-
-  }
-
-  onChanging(emp: Employee) {
-    // this.idInputRef.nativeElement.value = this.employee.id;
-    // this.nameInputRef.nativeElement.value = this.employee.name;
+    this.Employee = this.employeeService.getEmployees();
+    const employee: Employee = this.Employee[this.i];
+    console.log({...employee});
+    this.updatedIndex = this.i;
+    this.updateForm.setValue({...employee});
+    this.updateForm.clearValidators();
   }
 
   onUpdate() {
-    const id = this.idInputRef.nativeElement.value;
-    const name = this.nameInputRef.nativeElement.value;
-    const salary = this.salaryInputRef.nativeElement.value;
-    const dept = this.deptInputRef.nativeElement.value;
-    //const newEmployee = new Employee(id, name, salary, dept);
-  }
+    const emp: Employee = this.Employee[this.updatedIndex] = {
+      id: this.updateForm.value.id,
+      name: this.updateForm.value.name,
+      salary: this.updateForm.value.salary,
+      department: this.updateForm.value.department
+    };
+    console.log(emp);
+    this.employeeService.updateEmployee(this.updatedIndex, emp);
+ }
 }
